@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Clock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script src=""></script>
+    <div class="container">
+        <h1 id="currentDate"></h1>
+        <h1 id="currentDay"></h1>
+        <br><br>
+        <div id="showTimeHere" class="clock_outlook"></div>
+        <br> <br> <br>
+
+    </div>
+    <h2 id="location">🌍 Detecting location...</h2>
+    <h3 id="coordinates">📍 Finding coordinates...</h3>
+    <button id="toggleFormat">Switch to 24-Hour Format</button>
+
+
+    </div>
+    <div class="stars">
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+        <div class="star"></div>
+    </div>
+
+    <!-- Stopwatch Icon -->
+    <div id="stopwatch-icon">
+        ⏱️
+    </div>
+
+    <!-- Stopwatch Pop-up Modal -->
+    <div id="stopwatch-modal">
+        <div class="stopwatch-container">
+            <span id="close-stopwatch">✖</span>
+            <h2>🚀 Galactic Stopwatch</h2>
+            <div class="stopwatch">
+                <span id="minutes">00</span>:<span id="seconds">00</span>:<span id="milliseconds">00</span>
+            </div>
+            <div class="buttons">
+                <button id="startStop">Start</button>
+                <button id="reset">Reset</button>
+                <button id="lap">Lap</button>
+            </div>
+            <ul id="lapTimes"></ul>
+        </div>
+    </div>
+
+    <!-- Timer Icon -->
+    <div id="timer-icon">
+        ⏳
+    </div>
+
+    <!-- Timer Pop-up Modal -->
+    <div id="timer-modal">
+        <div class="timer-container">
+            <span id="close-timer">✖</span>
+            <h2>⏳ Galactic Timer</h2>
+
+            <div class="timer">
+                <input type="number" id="timer-minutes" placeholder="MM" min="0" max="59">
+                <span>:</span>
+                <input type="number" id="timer-seconds" placeholder="SS" min="0" max="59">
+            </div>
+
+            <div class="buttons">
+                <button id="startTimer">Start</button>
+                <button id="resetTimer">Reset</button>
+            </div>
+
+            <p id="timer-status"></p>
+        </div>
+    </div>
+
+    <!-- Alarm Icon -->
+    <div id="alarm-icon">⏰</div>
+
+    <!-- Alarm Pop-up -->
+    <div id="alarm-modal">
+        <div class="alarm-container">
+            <span id="close-alarm">✖</span>
+            <h2>⏰ Set Alarm</h2>
+
+            <div class="alarm">
+                <input type="number" id="alarm-hours" placeholder="HH" min="0" max="23">
+                :
+                <input type="number" id="alarm-minutes" placeholder="MM" min="0" max="59">
+            </div>
+
+            <div class="buttons">
+                <button id="setAlarm">Set Alarm</button>
+                <button id="resetAlarm">Reset</button>
+            </div>
+
+            <p id="alarm-status"></p>
+        </div>
+    </div>
+
+    <!-- Stop Alarm Button (Hidden Initially) -->
+    <button id="stopAlarmAlert" style="display: none;">🔕 Stop Alarm</button>
+
+    <!-- Audio for Alarm Sound -->
+    <audio id="alarmSound" src="alarm.mp3"></audio>
+
+    <!-- Link Alarm Script -->
+
+
+    <footer id="footer">Crafted by Mohan.R</footer>
+
+    <script>
+        // Clock
+        // Toggle between 12-hour and 24-hour formats
+        let is24HourFormat = false;
+
+        // Fetch time zone and city details using OpenWeatherMap API (replace "YOUR_API_KEY")
+        async function fetchTimeZone(lat, lon) {
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const locationData = await response.json();
+
+                const city = locationData.address.city || locationData.address.town || locationData.address.village || "Unknown City";
+                const country = locationData.address.country || "Unknown Country";
+
+                return { city, country };
+            } catch (error) {
+                console.error("Error fetching location data:", error);
+                return null;
+            }
+        }
+
+        // Get user's location
+        async function fetchLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (position) => {
+                    const lat = position.coords.latitude;
+                    const lon = position.coords.longitude;
+
+                    document.getElementById("coordinates").innerText = `📍 Coordinates: ${lat.toFixed(2)}, ${lon.toFixed(2)}`;
+
+                    const locationData = await fetchTimeZone(lat, lon);
+                    if (locationData) {
+                        document.getElementById("location").innerText = `🌍 ${locationData.city}, ${locationData.country}`;
+                        updateClock();
+                    }
+                }, (error) => {
+                    console.error("Geolocation error:", error);
+                    document.getElementById("location").innerText = "⚠️ Location access denied!";
+                });
+            } else {
+                document.getElementById("location").innerText = "⚠️ Geolocation not supported!";
+            }
+        }
+
+        // Update the clock dynamically
+        function updateClock() {
+            function clockEngine() {
+                const now = new Date();
+                let h = now.getHours();
+                let m = now.getMinutes();
+                let s = now.getSeconds();
+                let meridian = "";
+
+                if (!is24HourFormat) {
+                    meridian = h >= 12 ? "PM" : "AM";
+                    h = h % 12 || 12;
+                }
+
+                m = m < 10 ? "0" + m : m;
+                s = s < 10 ? "0" + s : s;
+
+                document.getElementById("showTimeHere").innerText = is24HourFormat
+                    ? `${h.toString().padStart(2, "0")}:${m}:${s}`
+                    : `${h}:${m}:${s} ${meridian}`;
+
+                document.getElementById("currentDate").innerText = now.toLocaleDateString();
+                document.getElementById("currentDay").innerText = now.toLocaleString('en-US', { weekday: 'long' });
+
+                setTimeout(clockEngine, 1000);
+            }
+            clockEngine();
+        }
+
+        // Toggle between 12-hour and 24-hour format
+        function toggleClockFormat() {
+            is24HourFormat = !is24HourFormat;
+            document.getElementById("toggleFormat").innerText = is24HourFormat ? "Switch to 12-Hour Format" : "Switch to 24-Hour Format";
+
+            // Refresh the clock with the new format
+            updateClock();
+        }
+
+        // Add event listener after DOM loads
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("toggleFormat").addEventListener("click", toggleClockFormat);
+            fetchLocation();
+        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("toggleFormat").addEventListener("click", toggleClockFormat);
+            fetchLocation();
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const starContainer = document.querySelector(".stars");
+
+            // Generate 80 random stars for a richer effect
+            for (let i = 0; i < 80; i++) {
+                let star = document.createElement("div");
+                star.classList.add("star");
+
+                // Random positioning
+                star.style.top = Math.random() * 100 + "vh";
+                star.style.left = Math.random() * 100 + "vw";
+
+                // Random animation delay for natural twinkle effect
+                star.style.animationDelay = Math.random() * 3 + "s";
+
+                // Random star size variations
+                let size = Math.random() * 5 + 5; // Between 5px and 10px
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+
+                // Append to stars container
+                starContainer.appendChild(star);
+            }
+        });
+
+        //Stop-Watch
+        let timer;
+        let isRunning = false;
+        let milliseconds = 0, seconds = 0, minutes = 0;
+
+        const startStopBtn = document.getElementById("startStop");
+        const resetBtn = document.getElementById("reset");
+        const lapBtn = document.getElementById("lap");
+        const lapList = document.getElementById("lapTimes");
+
+        const stopwatchIcon = document.getElementById("stopwatch-icon");
+        const stopwatchModal = document.getElementById("stopwatch-modal");
+        const closeStopwatch = document.getElementById("close-stopwatch");
+
+        // Show Stopwatch Modal
+        stopwatchIcon.addEventListener("click", () => {
+            stopwatchModal.style.visibility = "visible";
+            stopwatchModal.style.opacity = "1";
+        });
+
+        // Close Stopwatch Modal
+        closeStopwatch.addEventListener("click", () => {
+            stopwatchModal.style.visibility = "hidden";
+            stopwatchModal.style.opacity = "0";
+        });
+
+        function startStopwatch() {
+            if (!isRunning) {
+                isRunning = true;
+                startStopBtn.innerText = "Pause";
+                timer = setInterval(() => {
+                    milliseconds += 10;
+                    if (milliseconds === 1000) {
+                        milliseconds = 0;
+                        seconds++;
+                    }
+                    if (seconds === 60) {
+                        seconds = 0;
+                        minutes++;
+                    }
+                    document.getElementById("milliseconds").innerText = milliseconds < 100 ? "0" + Math.floor(milliseconds / 10) : Math.floor(milliseconds / 10);
+                    document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+                    document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+                }, 10);
+            } else {
+                clearInterval(timer);
+                isRunning = false;
+                startStopBtn.innerText = "Start";
+            }
+        }
+
+        function resetStopwatch() {
+            clearInterval(timer);
+            isRunning = false;
+            milliseconds = 0;
+            seconds = 0;
+            minutes = 0;
+            document.getElementById("milliseconds").innerText = "00";
+            document.getElementById("seconds").innerText = "00";
+            document.getElementById("minutes").innerText = "00";
+            startStopBtn.innerText = "Start";
+            lapList.innerHTML = "";
+        }
+
+        function recordLap() {
+            if (isRunning) {
+                const lapTime = document.createElement("li");
+                lapTime.innerText = `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}:${milliseconds < 100 ? "0" + Math.floor(milliseconds / 10) : Math.floor(milliseconds / 10)}`;
+                lapList.appendChild(lapTime);
+            }
+        }
+
+        startStopBtn.addEventListener("click", startStopwatch);
+        resetBtn.addEventListener("click", resetStopwatch);
+        lapBtn.addEventListener("click", recordLap);
+
+        //Timer
+        let timerInterval;
+        let isTimerRunning = false;
+        let totalTimeInSeconds = 0;
+
+        const startTimerBtn = document.getElementById("startTimer");
+        const resetTimerBtn = document.getElementById("resetTimer");
+        const timerStatus = document.getElementById("timer-status");
+
+        const timerIcon = document.getElementById("timer-icon");
+        const timerModal = document.getElementById("timer-modal");
+        const closeTimer = document.getElementById("close-timer");
+
+        // Alarm sound
+        const timerSound = new Audio("alarm.mp3"); // Replace with your actual alarm sound file
+
+        // Show Timer Modal
+        timerIcon.addEventListener("click", () => {
+            timerModal.style.visibility = "visible";
+            timerModal.style.opacity = "1";
+        });
+
+        // Close Timer Modal
+        closeTimer.addEventListener("click", () => {
+            timerModal.style.visibility = "hidden";
+            timerModal.style.opacity = "0";
+        });
+
+        // Start Timer
+        function startTimer() {
+            if (!isTimerRunning) {
+                let minutes = parseInt(document.getElementById("timer-minutes").value) || 0;
+                let seconds = parseInt(document.getElementById("timer-seconds").value) || 0;
+                totalTimeInSeconds = minutes * 60 + seconds;
+
+                if (totalTimeInSeconds > 0) {
+                    isTimerRunning = true;
+                    startTimerBtn.innerText = "Pause";
+                    timerInterval = setInterval(updateTimer, 1000);
+                }
+            } else {
+                clearInterval(timerInterval);
+                isTimerRunning = false;
+                startTimerBtn.innerText = "Start";
+            }
+        }
+
+        // Update Timer Countdown
+        function updateTimer() {
+            if (totalTimeInSeconds > 0) {
+                totalTimeInSeconds--;
+                let minutes = Math.floor(totalTimeInSeconds / 60);
+                let seconds = totalTimeInSeconds % 60;
+
+                document.getElementById("timer-minutes").value = minutes < 10 ? "0" + minutes : minutes;
+                document.getElementById("timer-seconds").value = seconds < 10 ? "0" + seconds : seconds;
+            } else {
+                clearInterval(timerInterval);
+                timerStatus.innerText = "⏳ Time's Up!";
+                isTimerRunning = false;
+                startTimerBtn.innerText = "Start";
+
+                // Play alarm sound when time is up
+                timerSound.loop = true; // Keep playing until stopped
+                timerSound.play();
+            }
+        }
+
+        // Reset Timer
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            document.getElementById("timer-minutes").value = "";
+            document.getElementById("timer-seconds").value = "";
+            startTimerBtn.innerText = "Start";
+            timerStatus.innerText = "";
+
+            // Stop the alarm sound
+            timerSound.pause();
+            timerSound.currentTime = 0; // Reset sound to start
+        }
+
+        startTimerBtn.addEventListener("click", startTimer);
+        resetTimerBtn.addEventListener("click", resetTimer);
+
+        //Alarm
+        const alarmIcon = document.getElementById("alarm-icon");
+        const alarmModal = document.getElementById("alarm-modal");
+        const closeAlarmBtn = document.getElementById("close-alarm");
+        const setAlarmBtn = document.getElementById("setAlarm");
+        const resetAlarmBtn = document.getElementById("resetAlarm");
+        const stopAlarmAlertBtn = document.getElementById("stopAlarmAlert");
+        const alarmSound = document.getElementById("alarmSound");
+        const alarmStatus = document.getElementById("alarm-status");
+
+        let alarmTime = null;
+        let alarmInterval;
+
+        // ✅ Open Alarm Popup
+        alarmIcon.addEventListener("click", () => {
+            alarmModal.style.visibility = "visible";
+            alarmModal.style.opacity = "1";
+        });
+
+        // ✅ Close Alarm Popup
+        closeAlarmBtn.addEventListener("click", () => {
+            alarmModal.style.visibility = "hidden";
+            alarmModal.style.opacity = "0";
+        });
+
+        // ✅ Set Alarm
+        setAlarmBtn.addEventListener("click", () => {
+            let hours = parseInt(document.getElementById("alarm-hours").value) || 0;
+            let minutes = parseInt(document.getElementById("alarm-minutes").value) || 0;
+
+            if (!is24HourFormat && (hours < 1 || hours > 12)) {
+                alarmStatus.innerText = "⚠️ Invalid Hour! Use 1-12 in 12-hour format.";
+                return;
+            }
+            if (is24HourFormat && (hours < 0 || hours > 23)) {
+                alarmStatus.innerText = "⚠️ Invalid Hour! Use 0-23 in 24-hour format.";
+                return;
+            }
+            if (minutes < 0 || minutes > 59) {
+                alarmStatus.innerText = "⚠️ Invalid Minutes!";
+                return;
+            }
+
+            let formattedHours = is24HourFormat ? hours.toString().padStart(2, "0") : (hours % 12 || 12);
+            let formattedMinutes = minutes.toString().padStart(2, "0");
+            let meridian = is24HourFormat ? "" : (hours >= 12 ? "PM" : "AM");
+
+            alarmTime = is24HourFormat
+                ? `${formattedHours}:${formattedMinutes}`
+                : `${formattedHours}:${formattedMinutes} ${meridian}`;
+
+            alarmStatus.innerText = `⏰ Alarm Set for ${alarmTime}`;
+            alarmModal.style.visibility = "hidden";
+            alarmModal.style.opacity = "0";
+
+            // Check time every second
+            clearInterval(alarmInterval);
+            alarmInterval = setInterval(checkAlarm, 1000);
+        });
+
+        // ✅ Check Alarm
+        function checkAlarm() {
+            let now = new Date();
+            let currentHours = now.getHours();
+            let currentMinutes = now.getMinutes();
+
+            let currentTime = is24HourFormat
+                ? `${currentHours.toString().padStart(2, "0")}:${currentMinutes.toString().padStart(2, "0")}`
+                : `${(currentHours % 12 || 12)}:${currentMinutes.toString().padStart(2, "0")} ${currentHours >= 12 ? "PM" : "AM"}`;
+
+            if (alarmTime === currentTime) {
+                startAlarm();
+                clearInterval(alarmInterval);
+            }
+        }
+
+        // ✅ Start Alarm
+        function startAlarm() {
+            stopAlarmAlertBtn.style.display = "block";
+            alarmSound.loop = true;
+            alarmSound.play();
+
+            // Show browser notification
+            if (Notification.permission !== "granted") {
+                Notification.requestPermission();
+            } else {
+                new Notification("⏰ Alarm!", { body: "Your alarm is ringing!" });
+            }
+        }
+
+        // ✅ Stop Alarm
+        function stopAlarm() {
+            alarmSound.pause();
+            alarmSound.currentTime = 0;
+            stopAlarmAlertBtn.style.display = "none";
+        }
+
+        // ✅ Reset Alarm
+        resetAlarmBtn.addEventListener("click", () => {
+            alarmTime = null;
+            alarmStatus.innerText = "";
+            clearInterval(alarmInterval);
+            stopAlarm();
+        });
+
+        stopAlarmAlertBtn.addEventListener("click", stopAlarm);
+
+        // Select body and icons
+const body = document.body;
+const icons = {
+    stopwatch: document.getElementById("stopwatch-icon"),
+    timer: document.getElementById("timer-icon"),
+    alarm: document.getElementById("alarm-icon")
+};
+
+// Select modals and close buttons
+const modals = {
+    stopwatch: document.getElementById("stopwatch-modal"),
+    timer: document.getElementById("timer-modal"),
+    alarm: document.getElementById("alarm-modal")
+};
+
+const closeButtons = {
+    stopwatch: document.getElementById("close-stopwatch"),
+    timer: document.getElementById("close-timer"),
+    alarm: document.getElementById("close-alarm")
+};
+
+// Function to show modal and hide other icons
+function showModal(type) {
+    body.classList.add("modal-open");
+    icons[type].classList.add("active-icon"); // Keep the clicked icon visible
+}
+
+// Function to close modal and restore icons
+function closeModal(type) {
+    body.classList.remove("modal-open");
+    icons[type].classList.remove("active-icon"); // Remove active icon styling
+}
+
+// Attach event listeners
+Object.keys(modals).forEach(type => {
+    icons[type].addEventListener("click", () => showModal(type));
+    closeButtons[type].addEventListener("click", () => closeModal(type));
+});
+
+    </script>
+</body>
+
+</html>

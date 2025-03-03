@@ -1,0 +1,757 @@
+/* Reset default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'Orbitron', sans-serif; /* A futuristic font */
+}
+
+/* Galaxy Background */
+body {
+    background: url("space.jpg") no-repeat center center fixed;
+    background-size: cover;
+    color: #fed42d;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+	overflow: hidden;
+}
+
+/* Stars Container */
+.stars {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+/* Star Shape & Glow Effect */
+.star {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, white 40%, rgba(255, 255, 255, 0) 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+    opacity: 0.8;
+    animation: twinkle 2s infinite alternate ease-in-out;
+}
+
+/* Twinkling Animation */
+@keyframes twinkle {
+    0%, 100% { 
+        opacity: 0.5; 
+        transform: scale(0.8); 
+        filter: blur(1px);
+    }
+    50% { 
+        opacity: 1; 
+        transform: scale(1.5); 
+        filter: blur(0px);
+    }
+}
+
+/* Make Stars Smaller on Mobile */
+@media screen and (max-width: 768px) {
+    .star {
+        width: 5px;
+        height: 5px;
+    }
+}
+
+Generate Multiple Stars
+.star:nth-child(1) { top: 5%; left: 10%; animation-delay: 0s; }
+.star:nth-child(2) { top: 20%; left: 30%; animation-delay: 1s; }
+.star:nth-child(3) { top: 40%; left: 50%; animation-delay: 2s; }
+.star:nth-child(4) { top: 60%; left: 80%; animation-delay: 3s; }
+.star:nth-child(5) { top: 10%; left: 90%; animation-delay: 0.5s; }
+.star:nth-child(6) { top: 30%; left: 20%; animation-delay: 1.2s; }
+.star:nth-child(7) { top: 70%; left: 15%; animation-delay: 2.3s; }
+.star:nth-child(8) { top: 90%; left: 60%; animation-delay: 0.8s; }
+.star:nth-child(9) { top: 15%; left: 70%; animation-delay: 1.5s; }
+.star:nth-child(10) { top: 85%; left: 40%; animation-delay: 2.8s; }
+
+/* Responsive Star Scaling */
+@media screen and (max-width: 768px) {
+    .star {
+        width: 2px;
+        height: 2px;
+    }
+}
+
+
+/* Date and Day Styling */
+h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-shadow: 0 0 10px #ff00ff, 0 0 20px #00ffff;
+}
+
+/* Clock Display */
+.clock_outlook {
+    position: relative;
+    top: -50px;
+    font-size: 80px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 3px solid #fff;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(0, 0, 255, 0.6);
+    display: inline-block;
+    min-width: 200px;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Neon Glow Effect */
+.clock_outlook:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.8);
+}
+
+/* Position the date on the top-left */
+#currentDate {
+    position: fixed;
+    top: 20px;  /* Distance from the top */
+    left: 20px;  /* Distance from the left */
+    font-size: 24px;
+    color: white;
+    background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    text-align: left;
+}
+
+/* Neon Glow Effect */
+#currentDate:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.8);
+}
+
+/* Position the day on the top-right */
+#currentDay {
+    position: fixed;
+    top: 20px;  /* Distance from the top */
+    right: 20px;  /* Distance from the right */
+    font-size: 24px;
+    color: white;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    text-align: right;
+}
+/* Neon Glow Effect */
+#currentDay:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.8);
+}
+
+
+/* Responsive Adjustments for Smaller Screens */
+@media screen and (max-width: 768px) {
+    #currentDate, #currentDay {
+        font-size: 18px;
+        padding: 8px;
+    }
+}
+
+
+
+/* Footer */
+#footer {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    width: 100%;
+    color: #fff;
+    font-size: 14px;
+    position: fixed;
+    bottom: 0;
+    text-shadow: 0 0 5px #ff00ff;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    h1 {
+        font-size: 22px;
+    }
+
+    .clock_outlook {
+        font-size: 50px;
+        padding: 15px;
+    }
+
+    marquee img {
+        height: 70px;
+    }
+
+    #footer {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .clock_outlook {
+        font-size: 40px;
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    marquee img {
+        height: 50px;
+    }
+
+    #footer {
+        font-size: 10px;
+        padding: 8px;
+    }
+}
+
+/* Stopwatch Container */
+.stopwatch-container {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif; /* Space-style font */
+    color: #fff;
+    margin-top: 50px;
+}
+
+/* Stopwatch Display */
+.stopwatch {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: cyan;
+    text-shadow: 0 0 10px cyan, 0 0 20px blue;
+    padding: 15px;
+    border: 3px solid cyan;
+    display: inline-block;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 15px;
+}
+
+button {
+    background: #111;
+    color: white;
+    font-size: 1em;
+    padding: 10px 15px;
+    margin: 5px;
+    border: 2px solid cyan;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: cyan;
+    color: black;
+}
+
+/* Lap Times */
+#lapTimes {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+    max-width: 300px;
+    margin: auto;
+}
+
+#lapTimes li {
+    background: rgba(0, 0, 0, 0.6);
+    border-left: 5px solid cyan;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 1.2em;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .stopwatch {
+        font-size: 2em;
+    }
+    button {
+        font-size: 0.9em;
+    }
+}
+
+/* Stopwatch Icon */
+#stopwatch-icon {
+    position: fixed;
+    bottom: 20vh;
+    left: 33vw;
+    font-size: 4rem;
+    cursor: pointer;
+    color: cyan;
+    text-shadow: 0 0 15x cyan, 0 0 25px blue;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+#stopwatch-icon:hover {
+    transform: scale(1.3);
+    opacity: 0.8;
+}
+
+/* Stopwatch Modal (Hidden by Default) */
+#stopwatch-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Stopwatch Pop-up Container */
+.stopwatch-container {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 30px;
+	width: 600px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 25px cyan;
+    position: relative;
+}
+
+/* Close Button */
+#close-stopwatch {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: red;
+}
+
+/* Stopwatch Display */
+.stopwatch {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: cyan;
+    text-shadow: 0 0 15px cyan, 0 0 30px blue;
+    padding: 15px;
+    border: 3px solid cyan;
+    display: inline-block;
+    border-radius: 12px;
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 15px;
+}
+
+button {
+    background: #111;
+    color: white;
+    font-size: 1em;
+    padding: 10px 15px;
+    margin: 5px;
+    border: 2px solid cyan;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: cyan;
+    color: black;
+}
+
+/* Lap Times */
+#lapTimes {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+    max-width: 300px;
+    margin: auto;
+}
+
+#lapTimes li {
+    background: rgba(0, 0, 0, 0.6);
+    border-left: 5px solid cyan;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 1.2em;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .stopwatch {
+        font-size: 2em;
+    }
+    button {
+        font-size: 0.9em;
+    }
+}
+
+
+/* Timer Icon */
+#timer-icon {
+    position: fixed;
+    bottom: 20vh;    /* Positions it in the middle vertically */
+    left : 46vw;  /* Moves it to the right */
+    font-size: 4rem;  /* Increases the icon size */
+    cursor: pointer;
+    color: orange;
+    text-shadow: 0 0 15px orange, 0 0 25px red;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+#timer-icon:hover {
+    transform: scale(1.3);
+    opacity: 0.8;
+}
+
+/* Timer Modal */
+#timer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden; /* Keeps it hidden initially */
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Timer Pop-up Container */
+.timer-container {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 30px;  /* More padding for a bigger look */
+    width: 600px;  /* Increased width */
+    height: auto;   /* Adjust height dynamically */
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 25px orange;
+    position: relative;
+}
+
+
+/* Close Button */
+#close-timer {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem; /* Bigger close button */
+    cursor: pointer;
+    color: red;
+}
+
+/* Timer Input Fields */
+.timer {
+    font-size: 2em; /* Bigger font size */
+    color: orange;
+    text-shadow: 0 0 15px orange, 0 0 30px red;
+    padding: 20px;
+    border: 4px solid orange;
+    display: inline-block;
+    border-radius: 12px;
+}
+
+/* Make Input Fields Bigger */
+.timer input {
+    width: 200px; /* Increase input width */
+    font-size: 2.2em; /* Bigger text */
+    text-align: center;
+    background: black;
+    color: white;
+    border: 3px solid orange;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+
+.timer input::placeholder {
+    color: rgba(255, 165, 0, 0.5);
+}
+
+/* Buttons */
+.buttons {
+    margin-top: 15px;
+}
+
+button {
+    background: #111;
+    color: white;
+    font-size: 1em;
+    padding: 10px 15px;
+    margin: 5px;
+    border: 2px solid orange;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: orange;
+    color: black;
+}
+
+/* Timer Status */
+#timer-status {
+    margin-top: 10px;
+    font-size: 1.5em;
+	height: 50px;
+	text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: lightgreen;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .timer {
+        font-size: 1.5em;
+    }
+    button {
+        font-size: 0.9em;
+    }
+}
+
+#stopTimerAlert {
+    background: red;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+}
+
+/* Alarm */
+/* Alarm Icon */
+#alarm-icon {
+    position: fixed;
+    left: 60vw;
+    bottom: 20vh;
+    /* transform: translateY(-50%); */
+    font-size: 4rem;
+    cursor: pointer;
+    color: cyan;
+    text-shadow: 0 0 15px cyan, 0 0 25px blue;
+    transition: transform 0.3s, opacity 0.3s;
+}
+
+#alarm-icon:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
+}
+
+/* Alarm Modal */
+#alarm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Alarm Pop-up Container */
+.alarm-container {
+    background: rgba(0, 0, 0, 0.95);
+    padding: 40px;
+    width: 600px;
+    height: auto;
+    border-radius: 12px;
+    text-align: center;
+    color: white;
+    box-shadow: 0 0 25px cyan;
+    position: relative;
+}
+
+/* Close Button */
+#close-alarm {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: red;
+}
+
+/* Alarm Input Fields */
+.alarm {
+    font-size: 2em;
+    color: cyan;
+    text-shadow: 0 0 15px cyan, 0 0 30px blue;
+    padding: 20px;
+    border: 4px solid cyan;
+    display: inline-block;
+    border-radius: 12px;
+}
+
+/* Make Input Fields Bigger */
+.alarm input {
+    width: 200px;
+    font-size: 2em;
+    text-align: center;
+    background: black;
+    color: white;
+    border: 3px solid cyan;
+    border-radius: 8px;
+    padding: 5px;
+}
+
+/* Bigger Buttons */
+.buttons {
+    margin-top: 20px;
+}
+
+button {
+    background: #111;
+    color: white;
+    font-size: 1.5em;
+    padding: 15px 25px;
+    margin: 10px;
+    border: 3px solid cyan;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: cyan;
+    color: black;
+}
+
+/* Alarm Status */
+#alarm-status {
+    margin-top: 15px;
+    font-size: 1.5em;
+    color: lightgreen;
+}
+
+/* Stop Alarm Button */
+#stopAlarmAlert {
+    background: red;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.5em;
+    cursor: pointer;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: none;
+    border-radius: 8px;
+}
+
+#location {
+    position: fixed;
+    bottom: 10vh; /* Adjust vertical position */
+    right: 5vw; /* Align to right */
+    text-align: right; /* Align text */
+    color: white; /* Adjust text color */
+    font-size: 18px; /* Adjust font size */
+    background: rgba(0, 0, 0, 0.6); /* Optional: Background for better readability */
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Neon Glow Effect */
+#location:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.8);
+}
+
+/* Neon Glow Effect */
+#coordinates:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 40px rgba(0, 255, 255, 0.8);
+}
+
+#coordinates {
+    position: fixed;
+    bottom: 20vh; /* Adjust vertical position */
+    right: 5vw; /* Align to right */
+    text-align: right; /* Align text */
+    color: white; /* Adjust text color */
+    font-size: 18px; /* Adjust font size */
+    background: rgba(0, 0, 0, 0.6); /* Optional: Background for better readability */
+    padding: 10px 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+
+/* Adjustments for smaller screens */
+@media screen and (max-width: 768px) {
+    #location, #coordinates, #toggleFormat {
+        font-size: 16px;
+        right: 10px;
+        padding: 8px;
+    }
+}
+
+#toggleFormat {
+    position: fixed;
+    bottom: 30vh;
+    right : 5vw;
+    display: inline-block;
+    margin-top: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    border: 2px solid cyan;
+    background: black;
+    color: cyan;
+    padding: 10px 15px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+#toggleFormat:hover {
+    background: cyan;
+    color: black;
+}
+
+/* Default: All icons are visible */
+#stopwatch-icon, #timer-icon, #alarm-icon {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Hide other icons when a modal is open */
+.body-stopwatch #timer-icon, .body-stopwatch #alarm-icon,
+.body-timer #stopwatch-icon, .body-timer #alarm-icon,
+.body-alarm #stopwatch-icon, .body-alarm #timer-icon {
+    visibility: hidden;
+    opacity: 0;
+}
